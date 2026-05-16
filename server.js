@@ -46,6 +46,30 @@ app.get("/deploy-check", (req, res) => {
     });
 });
 
+// Client Info Route - Get request details and client IP
+app.get("/client-info", (req, res) => {
+    // Get client IP (handles proxy headers)
+    const clientIp = req.headers['x-forwarded-for'] || 
+                     req.connection.remoteAddress || 
+                     req.socket.remoteAddress || 
+                     req.ip;
+    
+    res.json({
+        success: true,
+        client: {
+            ip: clientIp,
+            userAgent: req.get('user-agent'),
+            language: req.get('accept-language'),
+            referer: req.get('referer') || 'Direct access'
+        },
+        request: {
+            method: req.method,
+            url: req.url,
+            timestamp: new Date().toISOString()
+        }
+    });
+});
+
 // Start Server
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

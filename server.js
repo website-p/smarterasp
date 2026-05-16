@@ -37,6 +37,15 @@ app.post("/api/echo", (req, res) => {
     });
 });
 
+app.get("/deploy-check", (req, res) => {
+    res.json({
+        success: true,
+        message: "Auto deploy is working 🚀",
+        deployedAt: new Date().toISOString(),
+        version: "1.0.1"
+    });
+});
+
 // Start Server
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

@@ -70,6 +70,28 @@ app.get("/client-info", (req, res) => {
     });
 });
 
+// Deployment Test Route - Useful for CI/CD pipeline verification
+app.get("/deploy-test", (req, res) => {
+    const deploymentInfo = {
+        success: true,
+        message: "Deployment successful! ✅",
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || "development",
+        deploymentId: Math.random().toString(36).substring(7),
+        features: {
+            expressVersion: require('express/package.json').version,
+            nodeVersion: process.version,
+            platform: process.platform
+        },
+        headers: {
+            host: req.get('host'),
+            'x-deployment-id': req.get('x-deployment-id') || 'manual-test'
+        }
+    };
+    
+    res.json(deploymentInfo);
+});
+
 // Start Server
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
